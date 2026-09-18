@@ -1,0 +1,14 @@
+{
+  "services": {},
+  "entities": {
+    "binary_sensor": {
+      "watering": {"default": "mdi:sprinkler-variant"}
+    },
+    "button": {
+      "water": {"default": "mdi:sprinkler"}
+    },
+    "number": {
+      "depth": {"default": "mdi:water"}
+    }
+  }
+}

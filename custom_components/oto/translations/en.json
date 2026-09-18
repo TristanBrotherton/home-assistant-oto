@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to OTO",
+        "description": "Enter your OTO account credentials. The password is exchanged for a refresh token and is not saved.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect OTO",
+        "description": "Enter your OTO password to restore access. The password is not saved.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to connect to OTO",
+      "invalid_auth": "Invalid OTO credentials",
+      "wrong_account": "These credentials belong to a different OTO account",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This OTO account is already configured",
+      "reauth_successful": "OTO was reconnected"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "OTO options",
+        "description": "The default depth applies to newly discovered zones. Each zone also has its own Depth entity.",
+        "data": {
+          "watering_depth": "Default watering depth (mm)",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      }
+    }
+  }
+}
