@@ -1,0 +1,13 @@
+OTO for Home Assistant
+Copyright 2026 Tristan Brotherton
+
+This project includes a clean-room Python implementation of protocol facts
+documented by homebridge-oto:
+https://github.com/jonnadul/homebridge-oto
+
+homebridge-oto is Copyright Srujan Jonnadula and is licensed under the Apache
+License, Version 2.0. No TypeScript source code is included in this project.
+
+OTO is a trademark of its respective owner. This project is not affiliated
+with or endorsed by OTO Lawn.
+
