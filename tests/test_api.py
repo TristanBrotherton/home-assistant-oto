@@ -17,7 +17,7 @@ OTO_API = importlib.util.module_from_spec(SPEC)
 sys.modules["oto_api"] = OTO_API
 SPEC.loader.exec_module(OTO_API)
 
-SCHEDULER = OTO_API.SCHEDULER
+EMS = OTO_API.EMS
 OtoApiClient = OTO_API.OtoApiClient
 OtoAuthError = OTO_API.OtoAuthError
 OtoCredentials = OTO_API.OtoCredentials
@@ -150,9 +150,31 @@ async def test_start_uses_depth_and_never_retries() -> None:
     assert result.runtime_min == 2.5
     assert len(session.requests) == 1
     request = session.requests[0]
-    assert request["url"] == f"{SCHEDULER}/manual-start"
-    assert request["json"]["wateringQuantity"] == 1.0
-    assert request.get("headers") is None
+    assert request["method"] == "POST"
+    assert request["url"] == (
+        f"{EMS}/account/account-id/routines/executions"
+        "?allow_conflicts=true&overwrite_conflicts=false"
+    )
+    assert request["json"] == {
+        "deviceId": "device-1",
+        "zoneId": "zone-1",
+        "wateringQuantity": 1.0,
+    }
+    assert request["headers"] == {"Authorization": "Bearer id-token"}
+    assert result.schedule_id == "schedule-1"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("payload", [{}, {"message": "ok"}, {"scheduleId": ""}, "OK"])
+async def test_start_without_schedule_id_is_an_error(payload: Any) -> None:
+    session = FakeSession([FakeResponse(200, payload)])
+    client = OtoApiClient(
+        session,  # type: ignore[arg-type]
+        OtoCredentials("account-id", "refresh", "id-token", 10**12),
+    )
+    with pytest.raises(OtoResponseError, match="did not schedule"):
+        await client.async_start_zone("device-1", "zone-1", 1.0)
+    assert len(session.requests) == 1
 
 
 @pytest.mark.asyncio
