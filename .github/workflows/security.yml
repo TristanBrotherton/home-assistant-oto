@@ -123,7 +123,7 @@ jobs:
           fi
           gh api --paginate "repos/$REPO/pulls/$PR/files" \
             --jq '.[] | .filename, (.previous_filename // empty)' > files.txt
-          pattern='^\.github/|(^|/)manifest\.json$|(^|/)hacs\.json$|(^|/)(requirements[^/]*\.txt|pyproject\.toml|setup\.(py|cfg)|Pipfile(\.lock)?|poetry\.lock|uv\.lock)$|(^|/)(Dockerfile[^/]*|docker-compose[^/]*|Containerfile)$|(^|/)Makefile$|\.sh$|(^|/)scripts/|(^|/)conftest\.py$'
+          pattern='^\.github/|(^|/)\.gitleaksignore$|(^|/)manifest\.json$|(^|/)hacs\.json$|(^|/)(requirements[^/]*\.txt|pyproject\.toml|setup\.(py|cfg)|Pipfile(\.lock)?|poetry\.lock|uv\.lock)$|(^|/)(Dockerfile[^/]*|docker-compose[^/]*|Containerfile)$|(^|/)Makefile$|\.sh$|(^|/)scripts/|(^|/)conftest\.py$'
           if grep -E "$pattern" files.txt > hits.txt; then
             echo "::error title=Needs maintainer security review::This fork PR changes workflows, the integration manifest (requirements), dependency or build files, or test setup. A maintainer must review it by hand; CI does not clear this check."
             sed 's/^/  /' hits.txt
