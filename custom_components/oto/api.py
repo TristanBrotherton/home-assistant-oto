@@ -20,7 +20,6 @@ FIREBASE_API_KEY = "AIzaSyBlkDTR_GZSnGJuXdWAtH65ceeXyHtSrIs"
 IDENTITY_TOOLKIT = "https://identitytoolkit.googleapis.com/v1"
 SECURE_TOKEN = "https://securetoken.googleapis.com/v1"
 EMS = "https://oto-cloud-service-ems-prod-716180884817.us-central1.run.app"
-SCHEDULER = "https://oto-cloud-service-scheduler-prod-716180884817.us-central1.run.app"
 
 REQUEST_TIMEOUT = 20
 
@@ -213,25 +212,23 @@ class OtoApiClient:
         credentials = await self._async_ensure_token()
         payload = await self._request_json(
             "POST",
-            f"{SCHEDULER}/manual-start",
+            f"{EMS}/account/{credentials.uid}/routines/executions"
+            "?allow_conflicts=true&overwrite_conflicts=false",
+            headers=self._auth_headers(credentials),
             json={
-                "uid": credentials.uid,
                 "deviceId": device_id,
                 "zoneId": zone_id,
                 "wateringQuantity": round(float(watering_depth_mm), 2),
             },
-            # OTO's current manual-start endpoint does not accept the Firebase
-            # token used by EMS. Account identifiers are obtained only from
-            # authenticated discovery and are never accepted from user input.
         )
-        item = payload.get("schedule_item") if isinstance(payload, dict) else None
+        # OTO answers the legacy Scheduler /manual-start with success but never
+        # waters, so only a returned scheduleId counts as a started run.
+        if not isinstance(payload, dict) or not payload.get("scheduleId"):
+            raise OtoResponseError("OTO did not schedule the watering run")
+        item = payload.get("schedule_item")
         runtime = item.get("runtime_min") if isinstance(item, dict) else None
         return ManualStartResult(
-            schedule_id=(
-                str(payload["scheduleId"])
-                if isinstance(payload, dict) and payload.get("scheduleId")
-                else None
-            ),
+            schedule_id=str(payload["scheduleId"]),
             runtime_min=float(runtime) if isinstance(runtime, (int, float)) else None,
         )
 
