@@ -1,0 +1,12 @@
+# Changes to CI, dependencies, install metadata and scan settings need the maintainer's review.
+/.github/                         @TristanBrotherton
+/.gitleaksignore                  @TristanBrotherton
+/custom_components/oto/manifest.json @TristanBrotherton
+/hacs.json                        @TristanBrotherton
+/pyproject.toml                   @TristanBrotherton
+**/requirements*.txt              @TristanBrotherton
+**/*.lock                         @TristanBrotherton
+**/Dockerfile*                    @TristanBrotherton
+**/*.sh                           @TristanBrotherton
+/scripts/                         @TristanBrotherton
+**/conftest.py                    @TristanBrotherton
