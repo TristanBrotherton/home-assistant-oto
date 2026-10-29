@@ -1,2 +1,2 @@
 # OTO's public Firebase web API key, shipped in OTO's own app; not a secret.
-a0dfe4ae17f25451e35e78db6978c28ea157f1bb:custom_components/oto/api.py:gcp-api-key:19
+49f0a8a1bd48f4831b7d6b21f447720eddc273a7:custom_components/oto/api.py:gcp-api-key:19
